@@ -30,7 +30,7 @@ def LoadDataList():
     value = np.concatenate(tem, axis=0)
     return value
 
-def LoadData(table, select, date):
+def LoadData(table, select, date, article_type = ''):
     def execute_sql2(sql):
         
         conn = ( pymysql.connect(host = HOST,
@@ -49,25 +49,20 @@ def LoadData(table, select, date):
         except:
             conn.close()
             return ''
-    def load(table ,date, select):
-        sql = "select `{}` from {} WHERE `date` >= '{}'".format(select,table,date)
+    def load(table ,date, select, article_type):
+        if isinstance(select,list):
+            select2 = "`,`".join(select)
+            
+        sql = "select `{}` from {} WHERE `date` >= '{}'".format(select2,table,date)
+        if article_type != '': sql = "{} AND `article_type` = '{}' ".format(sql,article_type)
         tem = execute_sql2(sql)
         data = pd.DataFrame(list(tem))
         if len(data) > 0:
             data.columns = [select]
         return data
     
-    def load_multi(table ,date, select_list):
-        data = pd.DataFrame()        
-        for select in select_list:
-            value = load(table ,date, select)
-            data[select] = value
-        return data
     #-----------------------------------------------
-    if isinstance(select,str):
-        data = load(table ,date, select)
+    if isinstance(select,str) or isinstance(select,list):
+        data = load(table ,date, select, article_type)
         return data
-    elif isinstance(select,list):
-        data = load_multi(table ,date, select)
-        return data
-    
+

@@ -67,7 +67,7 @@ def jieba_cut_word(article_amount,data):
     article_list = []
     for i in range(article_amount):
         if i%100 == 0 : print('{}/{}'.format(i,article_amount))
-        tem = data['article'][i]
+        tem = data.loc[i,'title'].values[0]
         
         # replace english
         r1 = '[a-zA-Z0-9’"#$%&\'()*+-./:;<=>?@★、…【】：「」《》“”‘’！[\\]^_`{|}~]+'
