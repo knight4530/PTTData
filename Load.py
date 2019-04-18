@@ -58,7 +58,7 @@ def LoadData(table, select, date, article_type = ''):
         tem = execute_sql2(sql)
         data = pd.DataFrame(list(tem))
         if len(data) > 0:
-            data.columns = [select]
+            data.columns = select
         return data
     
     #-----------------------------------------------
